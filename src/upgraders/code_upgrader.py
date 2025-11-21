@@ -4,7 +4,7 @@ Upgrades code to modern standards and best practices
 """
 import logging
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field
 import re
 import ast
@@ -81,7 +81,7 @@ class CodeUpgrader:
                 error=str(e)
             )
     
-    def _add_type_hints(self, content: str) -> tuple[str, List[Dict]]:
+    def _add_type_hints(self, content: str) -> Tuple[str, List[Dict[str, Any]]]:
         """Add type hints to functions without them"""
         changes = []
         try:
@@ -104,7 +104,7 @@ class CodeUpgrader:
             logger.debug(f"Type hint analysis failed: {e}")
             return content, changes
     
-    def _improve_docstrings(self, content: str) -> tuple[str, List[Dict]]:
+    def _improve_docstrings(self, content: str) -> Tuple[str, List[Dict[str, Any]]]:
         """Improve or add docstrings"""
         changes = []
         try:
@@ -125,7 +125,7 @@ class CodeUpgrader:
             logger.debug(f"Docstring analysis failed: {e}")
             return content, changes
     
-    def _modernize_exception_handling(self, content: str) -> tuple[str, List[Dict]]:
+    def _modernize_exception_handling(self, content: str) -> Tuple[str, List[Dict[str, Any]]]:
         """Modernize exception handling patterns"""
         changes = []
         
@@ -139,7 +139,7 @@ class CodeUpgrader:
         
         return content, changes
     
-    def _optimize_imports(self, content: str) -> tuple[str, List[Dict]]:
+    def _optimize_imports(self, content: str) -> Tuple[str, List[Dict[str, Any]]]:
         """Optimize and organize imports"""
         changes = []
         lines = content.split('\n')
@@ -159,7 +159,7 @@ class CodeUpgrader:
         
         return content, changes
     
-    def _convert_to_f_strings(self, content: str) -> tuple[str, List[Dict]]:
+    def _convert_to_f_strings(self, content: str) -> Tuple[str, List[Dict[str, Any]]]:
         """Convert old-style string formatting to f-strings"""
         changes = []
         upgraded = content

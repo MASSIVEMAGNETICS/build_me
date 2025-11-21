@@ -45,8 +45,14 @@ def test_security_patterns():
     """Test security pattern detection"""
     scanner = SecurityScanner()
     
-    # Test hardcoded password detection
-    test_code = 'password = "hardcoded_secret123"'
-    issues = scanner.scan_file.__wrapped__(scanner, None)
-    # This is a basic test - would need actual file for full test
-    assert scanner.patterns['hardcoded_secret'] is not None
+    # Verify patterns are loaded
+    assert 'hardcoded_secret' in scanner.patterns
+    assert len(scanner.patterns['hardcoded_secret']) > 0
+    
+    # Test pattern structure
+    for pattern_type, patterns in scanner.patterns.items():
+        assert isinstance(patterns, list)
+        assert len(patterns) > 0
+        for pattern, desc in patterns:
+            assert isinstance(pattern, str)
+            assert isinstance(desc, str)
