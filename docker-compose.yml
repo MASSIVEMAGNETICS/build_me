@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  omniforge:
+    build: .
+    container_name: omniforge-api
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG_MODE=false
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - PARALLEL_WORKERS=4
+      - CACHE_ENABLED=true
+    volumes:
+      - ./logs:/app/logs
+      - ./cache:/app/cache
+      - ./reports:/app/reports
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  nginx:
+    image: nginx:alpine
+    container_name: omniforge-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - omniforge
+    restart: unless-stopped
+
+networks:
+  default:
+    name: omniforge-network
